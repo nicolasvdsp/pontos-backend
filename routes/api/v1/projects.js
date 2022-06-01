@@ -1,28 +1,9 @@
 var express = require('express');
 var router = express.Router();
+const projectsController = require('../../../controller/api/v1/projects')
 
-router.get('/', (req, res) => {
-    res.json({
-        "status": "success",
-        "data": {
-            "projects": []
-        }
-    });
-});
+router.get('/', projectsController.getAll);
 
-router.post('/', (req, res) => {
-    res.json({
-        "status": "success",
-        "data": {
-            "project": {
-                "title": "Smash mental support",
-                "description": "Supporting my sidebitches",
-                "picture": "https://via.placeholder.com/150",
-                "tags": "ndoejs",
-                "link": "www.google.be"
-            }
-        }
-    });
-});
+router.post('/', projectsController.create);
 
 module.exports = router;
