@@ -13,11 +13,11 @@ const getAll = async (req, res) => {
 
 const create = async (req, res) => {
     let project = new Project();
-    project.title = "NMBS app",
-    project.description = "Redesigning the NMBS app",
-    project.picture = "https://via.placeholder.com/150",
-    project.tags = "ux, ui",
-    project.link = "www.google.be"
+    project.title = req.body.title;
+    project.description = req.body.description;
+    project.picture = req.body.picture;
+    project.tags = req.body.tags;
+    project.link = req.body.link;
     let newProject = await project.save()
 
     res.json({
