@@ -1,13 +1,4 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
-const projectSchema = new Schema({
-    title: {type: String, required: true},
-    description: {type: String, required: true},
-    picture: {type: String, required: true},
-    tags: {type: String, required: false},
-    link: {type: String, required: false},
-});
-const Project = mongoose.model('Project', projectSchema);
+const Project = require('../../../models/api/v1/Project');
 
 
 const getAll = async (req, res) => {
@@ -22,10 +13,10 @@ const getAll = async (req, res) => {
 
 const create = async (req, res) => {
     let project = new Project();
-    project.title = "Smash mental support",
-    project.description = "Supporting my sidebitches",
+    project.title = "NMBS app",
+    project.description = "Redesigning the NMBS app",
     project.picture = "https://via.placeholder.com/150",
-    project.tags = "nojejs",
+    project.tags = "ux, ui",
     project.link = "www.google.be"
     let newProject = await project.save()
 
