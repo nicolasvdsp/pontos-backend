@@ -9,6 +9,9 @@ const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const projectsRouter = require('./routes/api/v1/projects');
 
+const mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost:27017/pontos-projects');
+
 const app = express();
 
 // view engine setup
