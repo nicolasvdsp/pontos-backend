@@ -19,6 +19,33 @@ const getAll = async (req, res) => {
     }
 }
 
+const getProject = async (req, res) => {
+    try {
+        const key = req.params.key;
+        const result = await Project.findOne(
+            {key: key}
+        )
+        if(result===null){
+            throw null;
+        }
+        
+        res.json({
+            "status": "success",
+            "data": {
+                "project": result
+            }
+        });
+                
+        
+    } catch {
+        const key = req.params.key;
+        res.json({
+            "status": "error",
+            "message": `couldn't get project ${key}`
+        });
+    }
+}
+
 const create = async (req, res) => {
     try {
 
@@ -47,5 +74,6 @@ const create = async (req, res) => {
 
 module.exports = {
     getAll,
+    getProject,
     create
 }

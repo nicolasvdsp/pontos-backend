@@ -6,6 +6,7 @@ const projectSchema = new Schema({
     picture: {type: String, required: true},
     tags: {type: String, required: false},
     link: {type: String, required: false},
+    key: {type: String, required: true}
 });
 const Project = mongoose.model('Project', projectSchema);
 
