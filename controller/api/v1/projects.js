@@ -1,4 +1,5 @@
 const Project = require('../../../models/api/v1/Project');
+const _ = require('lodash');
 
 
 const getAll = async (req, res) => {
@@ -55,6 +56,7 @@ const create = async (req, res) => {
         project.picture = req.body.picture;
         project.tags = req.body.tags;
         project.link = req.body.link;
+        project.key = _.camelCase(project.title);
         let newProject = await project.save()
         
         res.json({
