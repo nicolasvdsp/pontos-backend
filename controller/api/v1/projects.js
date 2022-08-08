@@ -49,7 +49,6 @@ const getProject = async (req, res) => {
 
 const create = async (req, res) => {
     try {
-
         let project = new Project();
         project.title = req.body.title;
         project.description = req.body.description;
@@ -57,19 +56,55 @@ const create = async (req, res) => {
         project.tags = req.body.tags;
         project.link = req.body.link;
         project.key = _.camelCase(project.title);
-        let newProject = await project.save()
         
-        res.json({
-            "status": "success",
-            "data": {
-                "project": newProject
+        // construct errors per parameter when empty, for response to frontend
+        let errorfeedback = {};
+        if (project.title === '') {
+            errorfeedback.title = 'A title would look great on this project!';
+        }
+        if (project.description === '') {
+            errorfeedback.description = 'Without description nobody\'ll know what\'s up.';
+        }
+        if (project.picture === '') {
+            errorfeedback.picture = "Am I blind or are there no pictures uploaded?";
+        }
+        if (project.tags === '') {
+            errorfeedback.tags = "Throw at least one tag in the party will ya?";
+        }
+        if (project.link === '') {
+            errorfeedback.link = "Provide a link towards your project please";
+        }
+
+        await project.save((err) => {
+            if(err) {
+                if(err.code==11000){
+                    res.json({
+                        status: 'error',
+                        message: 'Choose a project with another name'
+                    });
+                } else {
+                    res.status(400).json({
+                        status: 'error',
+                        message: errorfeedback,
+                        errormessage: err.message
+                    })
+                }
+
+            } else {
+                res.json({
+                    "status": "success",
+                    "data": {
+                        "project": project
+                    }
+                });
             }
-        });
+        })
+        
     }
     catch {
         res.json({
             "status": "error",
-            "message": "Couldn't create your project"
+            "message": err.message
         })
     }
 }
