@@ -1,5 +1,6 @@
 const Project = require('../../../models/api/v1/Project');
 const _ = require('lodash');
+const { checkIfPropertiesNotEmpty } = require('../../../pontos_modules/pontos');
 
 
 const getAll = async (req, res) => {
@@ -57,30 +58,14 @@ const create = async (req, res) => {
         project.link = req.body.link;
         project.key = _.camelCase(project.title);
         
-        // construct errors per parameter when empty, for response to frontend
-        let errorfeedback = {};
-        if (project.title === '') {
-            errorfeedback.title = 'A title would look great on this project!';
-        }
-        if (project.description === '') {
-            errorfeedback.description = 'Without description nobody\'ll know what\'s up.';
-        }
-        if (project.picture === '') {
-            errorfeedback.picture = "Am I blind or are there no pictures uploaded?";
-        }
-        if (project.tags === '') {
-            errorfeedback.tags = "Throw at least one tag in the party will ya?";
-        }
-        if (project.link === '') {
-            errorfeedback.link = "Provide a link towards your project please";
-        }
+        let errorfeedback = checkIfPropertiesNotEmpty(project);
 
         await project.save((err) => {
             if(err) {
                 if(err.code==11000){
-                    res.json({
+                    res.status(400).json({
                         status: 'error',
-                        message: 'Choose a project with another name'
+                        message: 'A project with this name already exists.'
                     });
                 } else {
                     res.status(400).json({
@@ -102,9 +87,9 @@ const create = async (req, res) => {
         
     }
     catch {
-        res.json({
+        res.status(400).json({
             "status": "error",
-            "message": err.message
+            "message": "Something went wrong."
         })
     }
 }
